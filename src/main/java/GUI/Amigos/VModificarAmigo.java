@@ -10,7 +10,6 @@ import javax.swing.JTextField;
 
 public class VModificarAmigo extends javax.swing.JFrame {
     private VBuscarAmigo v;
-    private GestorBD gestorBD;
     private AmigoDAO amigoDAO;
     private GrupoDAO grupoDAO;
     private int idAmigo;
@@ -20,21 +19,14 @@ public class VModificarAmigo extends javax.swing.JFrame {
         setResizable(false);
         setLocationRelativeTo(null);
         
-        this.gestorBD = gestorBD;
         this.amigoDAO = amigoDAO;
         this.grupoDAO = grupoDAO;
         this.v = v;
-        
-         this.idAmigo = idAmigo;
-        
-        // Depuración: Imprimir el valor del ID recibido
-        System.out.println("ID recibido en VModificarAmigo: " + idAmigo); 
+        this.idAmigo = idAmigo;
         
         cargarGrupos();
-     
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -77,6 +69,7 @@ public class VModificarAmigo extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Nombre:");
 
+        nombreField.setFont(new java.awt.Font("Leelawadee", 0, 30)); // NOI18N
         nombreField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         nombreField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -88,6 +81,7 @@ public class VModificarAmigo extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Dirección:");
 
+        direccionField.setFont(new java.awt.Font("Segoe UI", 0, 30)); // NOI18N
         direccionField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         direccionField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -99,12 +93,14 @@ public class VModificarAmigo extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Teléfono:");
 
+        telefonoField.setFont(new java.awt.Font("Segoe UI", 0, 30)); // NOI18N
         telefonoField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 30)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Aficiones:");
 
+        aficionesField.setFont(new java.awt.Font("Segoe UI", 0, 30)); // NOI18N
         aficionesField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         aficionesField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -126,6 +122,7 @@ public class VModificarAmigo extends javax.swing.JFrame {
             }
         });
 
+        comboBox.setFont(new java.awt.Font("Segoe UI", 0, 30)); // NOI18N
         comboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -197,14 +194,11 @@ public class VModificarAmigo extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(aficionesField, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(jLabel6))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
-                        .addComponent(comboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(122, 122, 122)
+                .addGap(29, 29, 29)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(comboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(119, 119, 119)
                 .addComponent(btnModificarAmigo)
                 .addGap(55, 55, 55))
         );
@@ -271,6 +265,7 @@ public class VModificarAmigo extends javax.swing.JFrame {
         amigoDAO.actualizarAmigo(amigo);
 
         JOptionPane.showMessageDialog(this, "Amigo modificado exitosamente.");
+        v.buscarAmigo();
     }
 
     private void cargarGrupos() {
@@ -284,6 +279,8 @@ public class VModificarAmigo extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error al cargar los grupos: " + e.getMessage());
         }
     }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField aficionesField;

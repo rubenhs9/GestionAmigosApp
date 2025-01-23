@@ -32,7 +32,6 @@ GUI\Grupos\VBuscarGrupo$1.class
 GUI\Amigos\VBuscarAmigo$5.class
 Data\Grupo.class
 GUI\Amigos\VAgregarAmigos$3.class
-GUI\Grupos\VModificarGrupo$5.class
 BD\GrupoDAO.class
 GUI\Grupos\VAgregarGrupo$1.class
 GUI\Grupos\VBuscarGrupo$3.class

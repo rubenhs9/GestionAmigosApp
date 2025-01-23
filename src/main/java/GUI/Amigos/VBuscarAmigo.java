@@ -5,28 +5,21 @@ import BD.AmigoDAO;
 import BD.GestorBD;
 import BD.GrupoDAO;
 import Data.Amigo;
+import java.awt.TextArea;
 import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 
-/**
- *
- * @author Rubén
- */
 public class VBuscarAmigo extends javax.swing.JFrame {
-    private VModificarAmigo m;
     private VGestionAmigos v;
     private GestorBD gestorBD;
     private AmigoDAO amigoDAO;
     private GrupoDAO grupoDAO;
-    private Amigo amigo;
     private VGestionAmigos vGestionAmigos;
    
     public VBuscarAmigo(VGestionAmigos v, GestorBD gestorBD) {
         this.gestorBD = gestorBD;
         this.amigoDAO = new AmigoDAO(gestorBD);
         this.grupoDAO = new GrupoDAO(gestorBD);
-        this.vGestionAmigos = vGestionAmigos;
         minitComponents();
         setResizable(false);
         setLocationRelativeTo(null);
@@ -224,7 +217,7 @@ public class VBuscarAmigo extends javax.swing.JFrame {
         titulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         titulo.setText("Consulte a sus amigos");
 
-        buscador.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        buscador.setFont(new java.awt.Font("Segoe UI", 0, 30)); // NOI18N
         buscador.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         buscador.setText("ID o Nombre del Amigo");
         buscador.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -301,8 +294,8 @@ public class VBuscarAmigo extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(188, 188, 188)
-                                .addComponent(buscador, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addComponent(buscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(45, 45, 45)
                                 .addComponent(botonBuscar))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(153, 153, 153)
@@ -320,8 +313,8 @@ public class VBuscarAmigo extends javax.swing.JFrame {
                     .addComponent(titulo)
                     .addComponent(botonAtras))
                 .addGap(55, 55, 55)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(buscador)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(buscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(botonBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(fieldConsultas, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -362,8 +355,7 @@ public class VBuscarAmigo extends javax.swing.JFrame {
     }//GEN-LAST:event_botonBorrarActionPerformed
 
     private void botonBuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonBuscarMouseClicked
-    buscarAmigo();
-    
+        buscarAmigo();
     }//GEN-LAST:event_botonBuscarMouseClicked
 
     private void botonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarActionPerformed
@@ -410,11 +402,8 @@ public class VBuscarAmigo extends javax.swing.JFrame {
         }
 
         VModificarAmigo ventanaModificacion = new VModificarAmigo(gestorBD, this, grupoDAO, amigoDAO, idAmigo);
-
         ventanaModificacion.rellenarCampos(nombre, direccion, telefono, aficiones, grupo);
-
         ventanaModificacion.setVisible(true);
-
         this.setVisible(false);
     }//GEN-LAST:event_botonModificarMouseClicked
 
@@ -464,7 +453,7 @@ public class VBuscarAmigo extends javax.swing.JFrame {
     return ""; 
     }
 
-   public int getBuscador() {
+    public int getBuscador() {
     String b = buscador.getText();
     
     // Comprobamos si el texto en el buscador es un número
@@ -476,10 +465,10 @@ public class VBuscarAmigo extends javax.swing.JFrame {
         return -1; // Devolvemos un valor que indique que no se pudo obtener el ID
     }
 }
-    
-    
-    
-   
+
+    public void setFieldConsultas(String nombre) {
+        this.fieldConsultas = fieldConsultas;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonAtras;
