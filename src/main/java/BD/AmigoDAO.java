@@ -8,12 +8,10 @@ import java.util.List;
 
 public class AmigoDAO {
     private GestorBD gestorBD;
-
     
     public AmigoDAO(GestorBD gestorBD) {
         this.gestorBD = gestorBD;
     }
-
     
     public void crearTablaAmigos() {
         String sql = """
@@ -36,31 +34,6 @@ public class AmigoDAO {
             System.out.println("Error al crear la tabla 'amigos': " + e.getMessage());
         }
     }
-    
-    public List<String[]> obtenerTodosLosAmigos() {
-    List<String[]> amigos = new ArrayList<>();
-    String sql = "SELECT a.id, a.nombre, a.direccion, a.telefono, a.aficiones, g.nombre AS grupo, a.vacaciones FROM amigos a JOIN grupos g ON a.grupo_id = g.id";
-    try (Connection conn = gestorBD.getConnection();
-         PreparedStatement stmt = conn.prepareStatement(sql);
-         ResultSet rs = stmt.executeQuery()) {
-        while (rs.next()) {
-            String[] amigo = {
-                String.valueOf(rs.getInt("id")),
-                rs.getString("nombre"),
-                rs.getString("direccion"),
-                rs.getString("telefono"),
-                rs.getString("aficiones"),
-                rs.getString("grupo"),
-                rs.getString("vacaciones")
-            };
-            amigos.add(amigo);
-        }
-    } catch (SQLException e) {
-        System.out.println("Error al obtener los amigos: " + e.getMessage());
-    }
-    return amigos;
-}
-
     
     public void actualizarAmigo(Amigo amigo) {
     String sql = """
@@ -88,8 +61,6 @@ public class AmigoDAO {
     }
 }
 
-
-
     public void insertarAmigo(Amigo amigo) {
         String sql = """
                 INSERT INTO amigos (nombre, direccion, telefono, aficiones, grupo_id, vacaciones)
@@ -111,26 +82,21 @@ public class AmigoDAO {
         }
     }
 
-      
-
-// Método auxiliar para verificar si un string es un número
-private boolean isNumeric(String str) {
-    try {
-        Integer.parseInt(str);
-        return true;
-    } catch (NumberFormatException e) {
-        return false;
+    private boolean esNumerico(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
-}
-
-
     
     public void borrarAmigo(String criterio) {
     String sql;
     PreparedStatement stmt;
 
     // Verifica si el criterio es numérico
-    if (isNumeric(criterio)) {
+    if (esNumerico(criterio)) {
         // Si el criterio es un número, interpretamos que es un ID
         sql = "DELETE FROM amigos WHERE id = ?";
         try (Connection conn = gestorBD.getConnection()) {
@@ -162,7 +128,6 @@ private boolean isNumeric(String str) {
         }
     }
 }
-
     
     public List<String> buscarAmigosConGrupoYDestino(String criterio) {
     List<String> resultados = new ArrayList<>();
@@ -172,7 +137,7 @@ private boolean isNumeric(String str) {
         PreparedStatement stmt;
 
         // Verifica si el criterio es numérico
-        if (isNumeric(criterio)) {
+        if (esNumerico(criterio)) {
             sql = """
                 SELECT amigos.id, amigos.nombre, amigos.direccion, amigos.telefono, amigos.aficiones, 
                        grupo.nombre_grupo, grupo.destino_vacaciones
@@ -193,7 +158,7 @@ private boolean isNumeric(String str) {
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, "%" + criterio + "%");
         }
-//sdsadad
+
         try (ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 String resultado = String.format("""
@@ -225,7 +190,6 @@ private boolean isNumeric(String str) {
     }
     return resultados;
 }
-
     
     public void limpiarTabla(){
         String sql = "DELETE FROM amigos; VACUUM";
@@ -271,6 +235,7 @@ private boolean isNumeric(String str) {
         System.out.println("Error al obtener los amigos: " + e.getMessage());
     }
 }
+    
     public List<String> obtenerGrupos() {
         List<String> grupos = new ArrayList<>();
         String sql = "SELECT nombre_grupo FROM grupo";
@@ -289,8 +254,6 @@ private boolean isNumeric(String str) {
         return grupos;
     }
 
-
-    // Método para insertar datos de prueba en amigos
     public void agregarDatosDePruebaAmigos() {
         List<Amigo> amigosDePrueba = List.of(
                 new Amigo(1, "Juan", "Calle 1", "123456789", "Correr, Leer", 1, "Verano"),

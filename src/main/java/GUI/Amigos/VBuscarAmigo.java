@@ -4,8 +4,10 @@ package GUI.Amigos;
 import BD.AmigoDAO;
 import BD.GestorBD;
 import BD.GrupoDAO;
+import Data.Amigo;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -17,6 +19,7 @@ public class VBuscarAmigo extends javax.swing.JFrame {
     private GestorBD gestorBD;
     private AmigoDAO amigoDAO;
     private GrupoDAO grupoDAO;
+    private Amigo amigo;
     private VGestionAmigos vGestionAmigos;
    
     public VBuscarAmigo(VGestionAmigos v, GestorBD gestorBD) {
@@ -359,7 +362,76 @@ public class VBuscarAmigo extends javax.swing.JFrame {
     }//GEN-LAST:event_botonBorrarActionPerformed
 
     private void botonBuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonBuscarMouseClicked
-    String criterio = buscador.getText().trim();
+    buscarAmigo();
+    
+    }//GEN-LAST:event_botonBuscarMouseClicked
+
+    private void botonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_botonBuscarActionPerformed
+
+    private void botonModificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonModificarMouseClicked
+        String criterio = buscador.getText();
+        List<String> resultados = amigoDAO.buscarAmigosConGrupoYDestino(criterio);
+
+        if (resultados.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No se encontró ningún amigo con ese criterio.");
+            return;
+        }
+
+        String datosAmigo = resultados.get(0); 
+        System.out.println("Datos del amigo: " + datosAmigo); // DEPURACION ///////////////////
+        String[] lineas = datosAmigo.split("\n"); 
+
+        String nombre = obtenerValorCampo(lineas, "Nombre:");
+        String direccion = obtenerValorCampo(lineas, "Dirección:");
+        String telefono = obtenerValorCampo(lineas, "Teléfono:");
+        String aficiones = obtenerValorCampo(lineas, "Aficiones:");
+        String grupo = obtenerValorCampo(lineas, "Grupo:");
+
+        // DEPURACION ///////////////////
+        String idAmigoStr = obtenerValorCampo(lineas, "ID:");
+        System.out.println("Valor de ID extraído: " + idAmigoStr); 
+
+        int idAmigo = -1; 
+        try {
+            idAmigo = Integer.parseInt(idAmigoStr);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "No se pudo obtener un ID válido.");
+            return;
+        }
+
+                // DEPURACION ///////////////////
+        System.out.println("ID convertido: " + idAmigo); // Depuración
+
+        if (idAmigo == -1) {
+            JOptionPane.showMessageDialog(this, "No se pudo obtener el ID del amigo.");
+            return;
+        }
+
+        VModificarAmigo ventanaModificacion = new VModificarAmigo(gestorBD, this, grupoDAO, amigoDAO, idAmigo);
+
+        ventanaModificacion.rellenarCampos(nombre, direccion, telefono, aficiones, grupo);
+
+        ventanaModificacion.setVisible(true);
+
+        this.setVisible(false);
+    }//GEN-LAST:event_botonModificarMouseClicked
+
+    private void botonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonModificarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_botonModificarActionPerformed
+
+    private void buscadorFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_buscadorFocusGained
+        buscador.setText("");
+    }//GEN-LAST:event_buscadorFocusGained
+
+    private void buscadorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_buscadorFocusLost
+        buscador.setText("ID o Nombre del Amigo");
+    }//GEN-LAST:event_buscadorFocusLost
+
+    void buscarAmigo(){
+        String criterio = buscador.getText().trim();
     System.out.println("Criterio de búsqueda: " + criterio);
 
     if (criterio == null || criterio.trim().isEmpty()) {
@@ -381,56 +453,29 @@ public class VBuscarAmigo extends javax.swing.JFrame {
         fieldConsultas.setText(sb.toString());
     }
     
-    }//GEN-LAST:event_botonBuscarMouseClicked
-
-    private void botonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_botonBuscarActionPerformed
-
-    private void botonModificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonModificarMouseClicked
-        String criterio = buscador.getText();
-        List<String> resultados = amigoDAO.buscarAmigosConGrupoYDestino(criterio);
-
-        if (resultados.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No se encontró ningún amigo con ese criterio.");
-            return;
-        }
-
-        String datosAmigo = resultados.get(0); 
-        String[] lineas = datosAmigo.split("\n"); 
-
-        String nombre = obtenerValorCampo(lineas, "Nombre:");
-        String direccion = obtenerValorCampo(lineas, "Dirección:");
-        String telefono = obtenerValorCampo(lineas, "Teléfono:");
-        String aficiones = obtenerValorCampo(lineas, "Aficiones:");
-        String grupo = obtenerValorCampo(lineas, "Grupo:");
-
-        VModificarAmigo ventanaModificacion = new VModificarAmigo(this, amigoDAO, grupoDAO);
-        ventanaModificacion.rellenarCampos(nombre, direccion, telefono, aficiones, grupo);
-        ventanaModificacion.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_botonModificarMouseClicked
-
-    private void botonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonModificarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_botonModificarActionPerformed
-
-    private void buscadorFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_buscadorFocusGained
-        buscador.setText("");
-    }//GEN-LAST:event_buscadorFocusGained
-
-    private void buscadorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_buscadorFocusLost
-        buscador.setText("ID o Nombre del Amigo");
-    }//GEN-LAST:event_buscadorFocusLost
-
+    }
+    
     private String obtenerValorCampo(String[] lineas, String campo) {
     for (String linea : lineas) {
         if (linea.contains(campo)) {
             return linea.substring(linea.indexOf(campo) + campo.length()).trim();
         }
     }
-    return ""; // Retorna vacío si no se encuentra el campo
+    return ""; 
     }
+
+   public int getBuscador() {
+    String b = buscador.getText();
+    
+    // Comprobamos si el texto en el buscador es un número
+    try {
+        return Integer.parseInt(b);
+    } catch (NumberFormatException e) {
+        // Si no es un número, muestra un mensaje de error
+        JOptionPane.showMessageDialog(this, "Por favor, ingresa un ID numérico válido.");
+        return -1; // Devolvemos un valor que indique que no se pudo obtener el ID
+    }
+}
     
     
     

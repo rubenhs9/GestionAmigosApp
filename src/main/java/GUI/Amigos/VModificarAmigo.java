@@ -1,26 +1,39 @@
 package GUI.Amigos;
 
 import BD.AmigoDAO;
+import BD.GestorBD;
 import BD.GrupoDAO;
 import Data.Amigo;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 public class VModificarAmigo extends javax.swing.JFrame {
     private VBuscarAmigo v;
+    private GestorBD gestorBD;
     private AmigoDAO amigoDAO;
     private GrupoDAO grupoDAO;
-    private int amigoId; 
+    private int idAmigo;
     
-    public VModificarAmigo(VBuscarAmigo v, AmigoDAO amigoDAO, GrupoDAO grupoDAO) {
+     public VModificarAmigo(GestorBD gestorBD,VBuscarAmigo v,GrupoDAO grupoDAO, AmigoDAO amigoDAO, int idAmigo) {
         initComponents();
         setResizable(false);
         setLocationRelativeTo(null);
-        this.v = v;
+        
+        this.gestorBD = gestorBD;
         this.amigoDAO = amigoDAO;
         this.grupoDAO = grupoDAO;
+        this.v = v;
+        
+         this.idAmigo = idAmigo;
+        
+        // Depuración: Imprimir el valor del ID recibido
+        System.out.println("ID recibido en VModificarAmigo: " + idAmigo); 
+        
         cargarGrupos();
+     
     }
+
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -224,6 +237,7 @@ public class VModificarAmigo extends javax.swing.JFrame {
     }//GEN-LAST:event_direccionFieldActionPerformed
 
     private void btnModificarAmigoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModificarAmigoMouseClicked
+        v.buscarAmigo();
         modificarAmigo();
     }//GEN-LAST:event_btnModificarAmigoMouseClicked
 
@@ -250,9 +264,10 @@ public class VModificarAmigo extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
             return;
         }
-
+        
         int grupoId = grupoDAO.obtenerIdPorNombre(grupoSeleccionado);
-        Amigo amigo = new Amigo(amigoId, nombre, direccion, telefono, aficiones, grupoId, "Sin vacaciones");
+        
+        Amigo amigo = new Amigo(idAmigo,nombre, direccion, telefono, aficiones, grupoId, "Sin vacaciones");
         amigoDAO.actualizarAmigo(amigo);
 
         JOptionPane.showMessageDialog(this, "Amigo modificado exitosamente.");

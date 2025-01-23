@@ -40,6 +40,22 @@ public class GrupoDAO {
             System.out.println("Error al crear la tabla 'grupo': " + e.getMessage());
         }
     }
+    
+    public String obtenerNombrePorId(int grupoId) {
+    String sql = "SELECT nombre_grupo FROM grupo WHERE id = ?";
+    try (Connection conn = gestorBD.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setInt(1, grupoId); // Asigna el valor del grupoId al parámetro de la consulta
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getString("nombre_grupo"); // Retorna el nombre del grupo
+            }
+        }
+    } catch (SQLException e) {
+        System.out.println("Error al obtener el nombre del grupo: " + e.getMessage());
+    }
+    return null; // Retorna null si no se encuentra el grupo
+}
    
 // Método para buscar un grupo por nombre
 public String buscarGrupoPorNombre(String nombreGrupo) {
