@@ -13,7 +13,7 @@ public class Grupo {
     private String nombreGrupo;
     private String destinoVacaciones;
 
-    public Grupo(String nombreGrupo, String destinoVacaciones) {
+    public Grupo(int par, String nombreGrupo, String destinoVacaciones) {
         this.id = id;
         this.nombreGrupo = nombreGrupo;
         this.destinoVacaciones = destinoVacaciones;

@@ -15,6 +15,8 @@ public class Main {
     // Crear la tabla de grupos si no existe
     GrupoDAO grupoDAO = new GrupoDAO(gestorBD);
     grupoDAO.crearTablaGrupo();
+    grupoDAO.limpiarTabla();
+    grupoDAO.agregarDatosDePruebaGrupos();
 
     // Crear la tabla de amigos si no existe
     AmigoDAO amigoDAO = new AmigoDAO(gestorBD);
@@ -23,9 +25,8 @@ public class Main {
     amigoDAO.agregarDatosDePruebaAmigos();
     amigoDAO.mostrarTodosLosAmigos();
 
-    // Cargar la ventana principal
     java.awt.EventQueue.invokeLater(() -> {
-        VPal vPal = new VPal(); // Pasar GestorBD al constructor de VPal
+        VPal vPal = new VPal(); 
         vPal.setVisible(true);
     });
 }

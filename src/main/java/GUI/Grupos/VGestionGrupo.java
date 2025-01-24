@@ -17,12 +17,14 @@ public class VGestionGrupo extends javax.swing.JFrame {
     
     VPal v;
     private GestorBD gestorBD;
+    private VBuscarGrupo vb;
     
     public VGestionGrupo(GestorBD gestorBD, VPal v) {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
         this.v = v;
+        this.gestorBD =  gestorBD;
     }
 
     /**
@@ -110,7 +112,7 @@ public class VGestionGrupo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonAgregarMouseClicked
-        VAgregarGrupo amigos = new VAgregarGrupo(this);
+        VAgregarGrupo amigos = new VAgregarGrupo( gestorBD,this);
         amigos.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_botonAgregarMouseClicked
@@ -126,7 +128,7 @@ public class VGestionGrupo extends javax.swing.JFrame {
     }//GEN-LAST:event_botonAtrasMouseClicked
 
     private void botonBuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonBuscarMouseClicked
-        VBuscarGrupo amigos = new VBuscarGrupo(this);
+        VBuscarGrupo amigos = new VBuscarGrupo(this, gestorBD);
         amigos.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_botonBuscarMouseClicked

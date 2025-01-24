@@ -4,21 +4,34 @@
  */
 package GUI.Grupos;
 
+import BD.GestorBD;
+import BD.GrupoDAO;
 import GUI.Amigos.VModificarAmigo;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Rubén
  */
 public class VBuscarGrupo extends javax.swing.JFrame {
-    VGestionGrupo v;
+    private VGestionGrupo v;
+    private GestorBD gestorBD;
+    
     /**
      * Creates new form VBuscarGrupo
      */
-    public VBuscarGrupo(VGestionGrupo v) {
+    public VBuscarGrupo(VGestionGrupo v, GestorBD gestorBD) {
         initComponents();
         setLocationRelativeTo(null);
         this.v = v;
+        this.gestorBD =gestorBD;
+        cargarDatosEnTabla();
     }
 
     /**
@@ -230,6 +243,39 @@ public class VBuscarGrupo extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_botonModificarActionPerformed
 
+     private void cargarDatosEnTabla() {
+    GrupoDAO grupoDAO = new GrupoDAO(gestorBD); // Usa el GestorBD inicializado
+    List<Object[]> datos = grupoDAO.obtenerDatosDinamicos("grupo"); // Obtén los datos de la tabla `grupo`
+
+    // Define el modelo de la tabla
+    DefaultTableModel modeloTabla = new DefaultTableModel();
+
+    try (
+        Connection conn = gestorBD.getConnection();
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM grupo");
+        ResultSet rs = stmt.executeQuery()) {
+
+        // Obtener metadatos del ResultSet para las columnas
+        ResultSetMetaData metaData = rs.getMetaData();
+        int columnCount = metaData.getColumnCount();
+
+        // Agregar las columnas al modelo
+        for (int i = 1; i <= columnCount; i++) {
+            modeloTabla.addColumn(metaData.getColumnLabel(i)); // Nombre de la columna
+        }
+
+        // Agregar las filas al modelo
+        for (Object[] fila : datos) {
+            modeloTabla.addRow(fila); // Agregar cada fila al modelo
+        }
+
+    } catch (SQLException e) {
+        System.out.println("Error al cargar datos en la tabla: " + e.getMessage());
+    }
+
+    // Asignar el modelo al JTable
+    jTable1.setModel(modeloTabla);
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonAtras;

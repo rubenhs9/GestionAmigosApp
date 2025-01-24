@@ -4,9 +4,11 @@
  */
 package BD;
 
+import Data.Grupo;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -104,20 +106,48 @@ public String buscarGrupoPorNombre(String nombreGrupo) {
 
 
     // Método para insertar un grupo en la tabla 'grupo'
-    public void insertarGrupo(String nombreGrupo, String destinoVacaciones) {
+    public void insertarGrupo(Grupo grupo) {
         String sql = "INSERT INTO grupo (nombre_grupo, destino_vacaciones) VALUES (?, ?)";
 
         try (
                 Connection conn = gestorBD.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, nombreGrupo);
-            stmt.setString(2, destinoVacaciones);
+            stmt.setString(1, grupo.getNombreGrupo());
+            stmt.setString(2, grupo.getDestinoVacaciones());
             stmt.executeUpdate();
-            System.out.println("Grupo insertado con éxito: " + nombreGrupo);
+            System.out.println("Grupo insertado con éxito: " + grupo.getNombreGrupo());
         } catch (SQLException e) {
             System.out.println("Error al insertar grupo: " + e.getMessage());
         }
     }
+    
+    public List<Object[]> obtenerDatosDinamicos(String tabla) {
+    List<Object[]> datos = new ArrayList<>();
+    String sql = "SELECT * FROM " + tabla; 
+
+    try (
+        Connection conn = gestorBD.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery()) {
+
+        ResultSetMetaData metaData = rs.getMetaData();
+        int columnCount = metaData.getColumnCount(); 
+        
+        while (rs.next()) {
+            Object[] fila = new Object[columnCount];
+            for (int i = 1; i <= columnCount; i++) {
+                fila[i - 1] = rs.getObject(i); 
+            }
+            datos.add(fila); 
+        }
+
+    } catch (SQLException e) {
+        System.out.println("Error al obtener datos dinámicos: " + e.getMessage());
+    }
+
+    return datos;
+}
+
 
    public List<String> obtenerNombresDeGrupos() {
     List<String> nombresDeGrupos = new ArrayList<>();
@@ -138,13 +168,33 @@ public String buscarGrupoPorNombre(String nombreGrupo) {
 
     return nombresDeGrupos;
 }
+   
+    public void limpiarTabla(){
+        String sql = "DELETE FROM grupo; VACUUM";
+    
+    try (Connection conn = gestorBD.getConnection(); 
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        int rowsAffected = stmt.executeUpdate();
+        System.out.println("Se han eliminado " + rowsAffected + " amigos.");
+    } catch (SQLException e) {
+        System.out.println("Error al borrar los amigos: " + e.getMessage());
+    }
+    }
 
    
-    // Método para insertar datos de prueba en grupos
     public void agregarDatosDePruebaGrupos() {
-        insertarGrupo("Grupo de Verano", "Playa de Cancún");
-        insertarGrupo("Grupo de Invierno", "Montañas de los Alpes");
-        insertarGrupo("Grupo de Primavera", "Valle de las Flores");
+    // Lista de grupos de prueba
+    List<Grupo> gruposDePrueba = List.of(
+        new Grupo(1, "Grupo de Verano", "Playa de Cancún"),
+        new Grupo(2, "Grupo de Invierno", "Montañas de los Alpes"),
+        new Grupo(3, "Grupo de Primavera", "Valle de las Flores"),
+        new Grupo(4, "Grupo de Otoño", "Bosque de Secuoyas")
+    );
+
+    for (Grupo grupo : gruposDePrueba) {
+        insertarGrupo(grupo); 
     }
+    System.out.println("Datos de prueba de grupos insertados con éxito.");
+}
     
 }
