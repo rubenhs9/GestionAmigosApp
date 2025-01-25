@@ -59,16 +59,16 @@ public class VBuscarAmigo extends javax.swing.JFrame {
 
         buscador.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         buscador.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        buscador.setText("ID o Nombre del Amigo");
+        buscador.setText("Nombre o Teléfono de Amigo");
         buscador.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                if (buscador.getText().equals("ID o Nombre del Amigo")) {
+                if (buscador.getText().equals("Nombre o Teléfono de Amigo")) {
                     buscador.setText(""); // Limpiar texto predeterminado
                 }
             }
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (buscador.getText().isEmpty()) {
-                    buscador.setText("ID o Nombre del Amigo"); // Restaurar texto predeterminado
+                    buscador.setText("Nombre o Teléfono de Amigo"); // Restaurar texto predeterminado
                 }
             }
         });
@@ -219,7 +219,7 @@ public class VBuscarAmigo extends javax.swing.JFrame {
 
         buscador.setFont(new java.awt.Font("Segoe UI", 0, 30)); // NOI18N
         buscador.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        buscador.setText("ID o Nombre del Amigo");
+        buscador.setText("Nombre o Teléfono de Amigo");
         buscador.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 buscadorFocusGained(evt);
@@ -289,20 +289,19 @@ public class VBuscarAmigo extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(129, 129, 129)
+                        .addComponent(fieldConsultas, javax.swing.GroupLayout.PREFERRED_SIZE, 777, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(botonAtras)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(188, 188, 188)
                                 .addComponent(buscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(45, 45, 45)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(botonBuscar))
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(botonAtras)
                                 .addGap(153, 153, 153)
-                                .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 531, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(129, 129, 129)
-                        .addComponent(fieldConsultas, javax.swing.GroupLayout.PREFERRED_SIZE, 777, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 531, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(114, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -312,11 +311,11 @@ public class VBuscarAmigo extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(titulo)
                     .addComponent(botonAtras))
-                .addGap(55, 55, 55)
+                .addGap(63, 63, 63)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botonBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                    .addComponent(botonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fieldConsultas, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -412,11 +411,11 @@ public class VBuscarAmigo extends javax.swing.JFrame {
     }//GEN-LAST:event_botonModificarActionPerformed
 
     private void buscadorFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_buscadorFocusGained
-        buscador.setText("");
+       
     }//GEN-LAST:event_buscadorFocusGained
 
     private void buscadorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_buscadorFocusLost
-        buscador.setText("ID o Nombre del Amigo");
+       
     }//GEN-LAST:event_buscadorFocusLost
 
     void buscarAmigo(){
@@ -428,13 +427,12 @@ public class VBuscarAmigo extends javax.swing.JFrame {
         return;
     }
 
-    // Llamar al método del DAO para buscar con el nombre del grupo y el destino
+    // Llamo al método del DAO para buscar con el nombre del grupo y el destino
     List<String> resultados = amigoDAO.buscarAmigosConGrupoYDestino(criterio);
 
     if (resultados.isEmpty()) {
         fieldConsultas.setText("No se encontraron resultados para: " + criterio);
     } else {
-        // Combinar los resultados en un solo string para mostrarlos en el campo de texto
         StringBuilder sb = new StringBuilder();
         for (String resultado : resultados) {
             sb.append(resultado).append("\n");

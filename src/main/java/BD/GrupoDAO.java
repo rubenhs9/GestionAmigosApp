@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package BD;
 
 import Data.Grupo;
@@ -25,7 +21,6 @@ public class GrupoDAO {
         this.gestorBD = gestorBD;
     }
     
-    // Método para crear la tabla 'grupo'
     public void crearTablaGrupo() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS grupo (
@@ -44,48 +39,48 @@ public class GrupoDAO {
     }
     
     public String obtenerNombrePorId(int grupoId) {
-    String sql = "SELECT nombre_grupo FROM grupo WHERE id = ?";
-    try (Connection conn = gestorBD.getConnection();
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
-        stmt.setInt(1, grupoId); // Asigna el valor del grupoId al parámetro de la consulta
-        try (ResultSet rs = stmt.executeQuery()) {
-            if (rs.next()) {
-                return rs.getString("nombre_grupo"); // Retorna el nombre del grupo
+        String sql = "SELECT nombre_grupo FROM grupo WHERE id = ?";
+        try (Connection conn = gestorBD.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, grupoId); // Asigna el valor del grupoId al parámetro de la consulta
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("nombre_grupo"); // Retorna el nombre del grupo
+                }
             }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener el nombre del grupo: " + e.getMessage());
         }
-    } catch (SQLException e) {
-        System.out.println("Error al obtener el nombre del grupo: " + e.getMessage());
+        return null; // Retorna null si no se encuentra el grupo
     }
-    return null; // Retorna null si no se encuentra el grupo
-}
    
-// Método para buscar un grupo por nombre
-public String buscarGrupoPorNombre(String nombreGrupo) {
-    String sql = "SELECT nombre_grupo, destino_vacaciones FROM grupo WHERE nombre_grupo = ?";
-    String resultado = "";
+    // Método para buscar un grupo por nombre
+    public String buscarGrupoPorNombre(String nombreGrupo) {
+        String sql = "SELECT nombre_grupo, destino_vacaciones FROM grupo WHERE nombre_grupo = ?";
+        String resultado = "";
 
-    try (
-        Connection conn = gestorBD.getConnection();
-        PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (
+            Connection conn = gestorBD.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        stmt.setString(1, nombreGrupo);
-        var rs = stmt.executeQuery();
+            stmt.setString(1, nombreGrupo);
+            var rs = stmt.executeQuery();
 
-        if (rs.next()) {
-            String nombre = rs.getString("nombre_grupo");
-            String destino = rs.getString("destino_vacaciones");
-            resultado = "Nombre: " + nombre + ", Destino: " + destino;
-        } else {
-            resultado = "No se encontró ningún grupo con el nombre: " + nombreGrupo;
+            if (rs.next()) {
+                String nombre = rs.getString("nombre_grupo");
+                String destino = rs.getString("destino_vacaciones");
+                resultado = "Nombre: " + nombre + ", Destino: " + destino;
+            } else {
+                resultado = "No se encontró ningún grupo con el nombre: " + nombreGrupo;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al buscar grupo: " + e.getMessage());
+            resultado = "Error al realizar la búsqueda.";
         }
 
-    } catch (SQLException e) {
-        System.out.println("Error al buscar grupo: " + e.getMessage());
-        resultado = "Error al realizar la búsqueda.";
+        return resultado;
     }
-
-    return resultado;
-}
 
 
     public int obtenerIdPorNombre(String nombreGrupo) {
@@ -148,6 +143,23 @@ public String buscarGrupoPorNombre(String nombreGrupo) {
     return datos;
 }
 
+    public boolean existeNombre(String nombre) {
+    String sql = "SELECT COUNT(*) FROM grupo WHERE nombre_grupo = ?";
+    
+    try (Connection conn = gestorBD.getConnection(); 
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        
+        stmt.setString(1, nombre);  
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1) > 0;  
+            }
+        }
+    } catch (SQLException e) {
+        System.out.println("Error al verificar el teléfono: " + e.getMessage());
+    }
+    return false;  
+}
 
    public List<String> obtenerNombresDeGrupos() {
     List<String> nombresDeGrupos = new ArrayList<>();
@@ -181,6 +193,20 @@ public String buscarGrupoPorNombre(String nombreGrupo) {
     }
     }
 
+    public boolean eliminarGrupo(int idGrupo) {
+    String sql = "DELETE FROM grupo WHERE id = ?";
+    
+    try (Connection conn = gestorBD.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setInt(1, idGrupo); // Asigna el ID del grupo al query
+        
+        int filasAfectadas = stmt.executeUpdate(); // Ejecuta la eliminación
+        return filasAfectadas > 0; // Retorna true si se eliminó correctamente
+    } catch (SQLException e) {
+        System.out.println("Error al eliminar el grupo: " + e.getMessage());
+        return false;
+    }
+}
    
     public void agregarDatosDePruebaGrupos() {
     // Lista de grupos de prueba
@@ -195,6 +221,28 @@ public String buscarGrupoPorNombre(String nombreGrupo) {
         insertarGrupo(grupo); 
     }
     System.out.println("Datos de prueba de grupos insertados con éxito.");
+}
+    
+    public void modificarGrupo(int id, String nombreGrupo, String destinoVacaciones) {
+    String sql = "UPDATE grupo SET nombre_grupo = ?, destino_vacaciones = ? WHERE id = ?";
+    try (
+        Connection conn = gestorBD.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setString(1, nombreGrupo);
+        stmt.setString(2, destinoVacaciones);
+        stmt.setInt(3, id);
+
+        int filasAfectadas = stmt.executeUpdate();
+        if (filasAfectadas > 0) {
+            System.out.println("Grupo actualizado correctamente: ID " + id);
+        } else {
+            System.out.println("No se pudo actualizar el grupo: ID " + id);
+        }
+
+    } catch (SQLException e) {
+        System.out.println("Error al modificar grupo: " + e.getMessage());
+    }
 }
     
 }

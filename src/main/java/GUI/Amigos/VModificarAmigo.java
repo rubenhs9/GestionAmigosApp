@@ -255,7 +255,7 @@ public class VModificarAmigo extends javax.swing.JFrame {
         String grupoSeleccionado = (String) comboBox.getSelectedItem();
 
         if (nombre.isEmpty() || direccion.isEmpty() || telefono.isEmpty() || aficiones.isEmpty() || grupoSeleccionado == null) {
-            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
+            JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios. ", "¡Cuidado!", JOptionPane.WARNING_MESSAGE);
             return;
         }
         
@@ -264,7 +264,7 @@ public class VModificarAmigo extends javax.swing.JFrame {
         Amigo amigo = new Amigo(idAmigo,nombre, direccion, telefono, aficiones, grupoId, "Sin vacaciones");
         amigoDAO.actualizarAmigo(amigo);
 
-        JOptionPane.showMessageDialog(this, "Amigo modificado exitosamente.");
+        JOptionPane.showMessageDialog(null, "Tu amigo " + nombre + " ha sido agregado con éxito. ", "Información", JOptionPane.INFORMATION_MESSAGE);
         v.buscarAmigo();
     }
 

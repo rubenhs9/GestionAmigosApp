@@ -129,6 +129,24 @@ public class AmigoDAO {
     }
 }
     
+    public boolean existeTelefono(String telefono) {
+    String sql = "SELECT COUNT(*) FROM amigos WHERE telefono = ?";
+    
+    try (Connection conn = gestorBD.getConnection(); 
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        
+        stmt.setString(1, telefono);  
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1) > 0;  
+            }
+        }
+    } catch (SQLException e) {
+        System.out.println("Error al verificar el teléfono: " + e.getMessage());
+    }
+    return false;  
+}
+    
     public List<String> buscarAmigosConGrupoYDestino(String criterio) {
     List<String> resultados = new ArrayList<>();
     String sql;
@@ -143,7 +161,7 @@ public class AmigoDAO {
                        grupo.nombre_grupo, grupo.destino_vacaciones
                 FROM amigos
                 LEFT JOIN grupo ON amigos.grupo_id = grupo.id
-                WHERE amigos.id = ?;
+                WHERE amigos.telefono = ?;
                 """;
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, Integer.parseInt(criterio));

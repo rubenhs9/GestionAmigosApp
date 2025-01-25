@@ -7,20 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GestorBD {
-    private String url; // Propiedad de instancia
-    private static final String DATABASE_PATH = "res/"; // Ruta donde se almacenará la base de datos
+    private String url; 
+    private static final String DATABASE_PATH = "res/"; 
     private static final String DATABASE_URL = "jdbc:sqlite:";
      private Connection conn;
 
 
     // Constructor para inicializar el gestor con la base de datos deseada
     public GestorBD(String databaseName) {
-        // Crear el directorio si no existe
         File carpeta = new File(DATABASE_PATH);
         if (!carpeta.exists()) {
             carpeta.mkdir();
         }
-        // Crear la URL para conectar a SQLite
         this.url = DATABASE_URL + DATABASE_PATH + databaseName + ".db";
     }
 
@@ -45,9 +43,6 @@ public class GestorBD {
             System.out.println("Error al conectar con la base de datos: " + e.getMessage());
         }
     }
-
-    
-
    
 
     // Método para cerrar la conexión

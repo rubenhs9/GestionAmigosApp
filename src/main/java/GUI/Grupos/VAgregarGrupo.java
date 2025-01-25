@@ -62,6 +62,7 @@ public class VAgregarGrupo extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Nombre:");
 
+        FieldNombre.setFont(new java.awt.Font("Segoe UI", 0, 30)); // NOI18N
         FieldNombre.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         FieldNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -73,6 +74,7 @@ public class VAgregarGrupo extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Destino:");
 
+        FieldDestino.setFont(new java.awt.Font("Segoe UI", 0, 30)); // NOI18N
         FieldDestino.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         FieldDestino.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -94,18 +96,6 @@ public class VAgregarGrupo extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(botonAtras)
-                        .addGap(111, 111, 111)
-                        .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 445, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(194, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(botonAgregarGrupo, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(267, 267, 267))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -116,6 +106,17 @@ public class VAgregarGrupo extends javax.swing.JFrame {
                     .addComponent(FieldNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
                     .addComponent(FieldDestino))
                 .addGap(177, 177, 177))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(botonAtras)
+                        .addGap(111, 111, 111)
+                        .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 445, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(264, 264, 264)
+                        .addComponent(botonAgregarGrupo, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(194, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,9 +133,9 @@ public class VAgregarGrupo extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(FieldDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(290, 290, 290)
+                .addGap(127, 127, 127)
                 .addComponent(botonAgregarGrupo)
-                .addGap(73, 73, 73))
+                .addGap(236, 236, 236))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -166,20 +167,25 @@ public class VAgregarGrupo extends javax.swing.JFrame {
 
     public void agregarGrupo(){
         
-        
         String nombre = FieldNombre.getText();
         String destino = FieldDestino.getText();
         
         if (grupoDAO == null) {
         throw new IllegalStateException("GrupoDAO no ha sido inicializado.");
-    }
+        }
         
         if (nombre.isEmpty() || destino.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
+            JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios. ", "¡Cuidado!", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        if (grupoDAO.existeNombre(nombre)) {
+            JOptionPane.showMessageDialog(null, "Ya existe un grupo con este nombre. ", "¡Cuidado!", JOptionPane.WARNING_MESSAGE);
             return;
         }
         
         Grupo grupo = new Grupo(0,nombre, destino);
+        JOptionPane.showMessageDialog(null, "Grupo " + nombre + " agregado con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
         grupoDAO.insertarGrupo(grupo);
         
     }
